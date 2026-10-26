@@ -1,0 +1,99 @@
+{
+ "suite": "data-shapes-contrib",
+ "tests": [
+  {
+   "test": "tests/core/path/seq-path-001",
+   "duplicates": [
+    "jena-array jena-shacl src/test/files/local/rdf-array/seq-path-001.ttl"
+   ]
+  },
+  {
+   "test": "tests/core/path/seq-path-alternative-nested-001",
+   "duplicates": []
+  },
+  {
+   "test": "tests/core/path/nil-predicate-path-001",
+   "duplicates": []
+  },
+  {
+   "test": "tests/core/path/ladder-path-001",
+   "duplicates": []
+  },
+  {
+   "test": "tests/core/path/ladder-path-002",
+   "duplicates": []
+  },
+  {
+   "test": "tests/core/path/empty-path-001",
+   "duplicates": []
+  },
+  {
+   "test": "tests/core/node/seq-in-or-001",
+   "duplicates": [
+    "jena-array jena-shacl src/test/files/local/rdf-array/seq-in-or-001.ttl"
+   ]
+  },
+  {
+   "test": "tests/core/node/seq-languageIn-001",
+   "duplicates": []
+  },
+  {
+   "test": "tests/core/node/seq-closed-ignored-001",
+   "duplicates": []
+  },
+  {
+   "test": "tests/core/node/ladder-in-001",
+   "duplicates": []
+  },
+  {
+   "test": "tests/core/node/in-empty-001",
+   "duplicates": []
+  },
+  {
+   "test": "tests/core/node/xone-empty-001",
+   "duplicates": []
+  },
+  {
+   "test": "tests/core/list/memberShape-property-001",
+   "duplicates": [
+    "jena-array jena-shacl src/test/files/local/rdf-array/seq-member-shape-001.ttl"
+   ]
+  },
+  {
+   "test": "tests/core/list/memberShape-node-001",
+   "duplicates": []
+  },
+  {
+   "test": "tests/core/list/listLength-property-001",
+   "duplicates": [
+    "jena-array jena-shacl src/test/files/local/rdf-array/seq-list-length-001.ttl"
+   ]
+  },
+  {
+   "test": "tests/core/list/listLength-node-001",
+   "duplicates": []
+  },
+  {
+   "test": "tests/core/list/uniqueMembers-property-001",
+   "duplicates": [
+    "jena-array jena-shacl src/test/files/local/rdf-array/seq-unique-members-001.ttl"
+   ]
+  },
+  {
+   "test": "tests/core/list/uniqueMembers-node-001",
+   "duplicates": []
+  },
+  {
+   "test": "tests/core/list/rgb-colour-001",
+   "duplicates": []
+  },
+  {
+   "test": "tests/core/list/polygon-001",
+   "duplicates": []
+  },
+  {
+   "test": "tests/core/list/playlist-001",
+   "duplicates": []
+  }
+ ]
+}
