@@ -370,7 +370,8 @@ def main():
                 problems.append(f'{name}: {difference}')
         changed |= write(f'tests/core/{d}/{name}.ttl', test_file(name, label, body, requires, jrows))
         dirs.setdefault(d, []).append(f'{name}.ttl')
-        dups.append({'test': f'tests/core/{d}/{name}', 'duplicates': dup})
+        if dup:
+            dups.append({'test': f'tests/core/{d}/{name}', 'duplicates': dup})
     for d, files in dirs.items():
         changed |= write(f'tests/core/{d}/manifest.ttl', manifest(f'rdf-array SHACL-array contrib tests: core/{d}', files))
     changed |= write('tests/core/manifest.ttl', manifest('rdf-array SHACL-array contrib tests: core', [f'{d}/manifest.ttl' for d in dirs]))
