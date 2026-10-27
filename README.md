@@ -1,6 +1,6 @@
 # data-shapes-contrib
 
-Tests that every [SHACL-array](https://rdf-array.github.io/rdf-array/shacl-array.html) implementation can
+Tests that every [SHACL-array](https://rdf-array.github.io/rdf-array/docs/shacl-array.html) implementation can
 share, but that no W3C suite contains because they test what rdf-array changes in SHACL: a SHACL list is a
 sequence term `( … )`, an `rdf:first`/`rdf:rest` ladder is triples and not a list, `()` is the empty list,
 and SHACL 1.2's `sh:memberShape`, `sh:minListLength`, `sh:maxListLength` and `sh:uniqueMembers` apply to
