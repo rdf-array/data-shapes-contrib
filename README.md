@@ -34,5 +34,5 @@ differing (`RUDOF_KNOWN`):
   focus node; this is not specific to sequences.
 
 The tests were seeded from jena-array's own (`jena-shacl/src/test/files/local/rdf-array/`), which stay where
-they are; [contrib-duplicates.md](https://github.com/rdf-array/rdf-array/blob/main/contrib-duplicates.md) in
+they are; [contrib-duplicates.md](https://github.com/rdf-array/rdf-array/blob/main/management/contrib-duplicates.md) in
 rdf-array/rdf-array lists which test each one reproduces.
