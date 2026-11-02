@@ -19,6 +19,15 @@ so a runner that walks one walks the other. Published at <https://rdf-array.gith
 `ra:Sequences`, and `ra:ShaclListConstraints` for the SHACL 1.2 list constraints over sequences. A test whose
 shapes graph is ill-formed under SHACL-array expects `sht:Failure`.
 
+## Slots (branch `rdf-undef`)
+
+On this branch the suite also carries the empty slot of a sequence
+([rdf-undef.md](https://github.com/rdf-array/rdf-array/blob/rdf-undef/docs/rdf-undef.md) §5): a slot conforms to no member shape, not
+even one without constraints, and it counts in `sh:minListLength` and `sh:maxListLength`. In `sh:uniqueMembers` a slot is equal to
+a slot and to nothing else, so `( undef undef )` repeats a member. A list in a shapes graph holds shapes, paths or values, so a slot
+in one (`sh:in`, `sh:or`, a sequence or alternative path, `sh:ignoredProperties`) makes the shapes graph ill-formed. These tests are
+named `undef-*` and require `ra:UndefSlots`.
+
 ## How the expectations were made
 
 [bin/build.py](bin/build.py) holds every case and writes every file; nothing here is edited by hand. Each

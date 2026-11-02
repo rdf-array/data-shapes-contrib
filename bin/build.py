@@ -14,6 +14,10 @@ it has; it has no SHACL 1.2 list constraints yet, so those cases (mf:requires ra
 have jena-array alone. Implementations are found beside this checkout (../rdf-array/.tools with
 jena-array's classpath, ../jena-array/jena-shacl, ../rudof-array/target/debug/rudof) or through
 JENA_ARRAY_TOOL, JENA_SHACL_CLASSES and RUDOF.
+
+The rdf-undef branch adds the empty slot of a sequence (rdf-array's docs/rdf-undef.md §5): a slot conforms to
+no member shape, it counts in a list's length, it is equal only to a slot, and a list in a shapes graph may not
+hold one. Those tests are named undef-* and require ra:UndefSlots.
 """
 import json
 import os
@@ -36,6 +40,7 @@ RDF = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
 EX = 'http://example/'
 JS = 'jena-array jena-shacl src/test/files/local/rdf-array'
 LIST = 'ra:ShaclListConstraints'
+UNDEF = 'ra:UndefSlots'
 
 PREFIXES = '''PREFIX ex: <http://example/>
 PREFIX mf: <http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#>
@@ -187,6 +192,59 @@ ex:repeats a ex:Playlist ; ex:tracks ( ex:t1 ex:t2 ex:t1 ) .
 ex:untitled a ex:Playlist ; ex:tracks ( ex:t1 ex:t3 ) .
 ex:empty a ex:Playlist ; ex:tracks () .
 ''', [LIST], []),
+    # docs/rdf-undef.md §5: the empty slot in data
+    ('list', 'undef-memberShape-property-001', 'a slot conforms to no member shape', '''
+ex:IRIShape a sh:NodeShape ; sh:nodeKind sh:IRI .
+ex:S a sh:NodeShape ; sh:targetNode ex:a, ex:b, ex:c ; sh:property ex:S-p .
+ex:S-p sh:path ex:p ; sh:memberShape ex:IRIShape .
+ex:a ex:p ( ex:x ex:y ) .
+ex:b ex:p ( ex:x undef ) .
+ex:c ex:p ( undef ) .
+''', [LIST, UNDEF], []),
+    ('list', 'undef-memberShape-any-001', 'a slot conforms to no member shape, not even one without constraints', '''
+ex:AnyShape a sh:NodeShape .
+ex:S a sh:NodeShape ; sh:targetObjectsOf ex:p ; sh:memberShape ex:AnyShape .
+ex:a ex:p ( 1 2 ) , ( 1 undef ) .
+''', [LIST, UNDEF], []),
+    ('list', 'undef-memberShape-nested-001', 'a slot in a nested sequence fails at its own depth; the outer sequence is a value', '''
+ex:IRIShape a sh:NodeShape ; sh:nodeKind sh:IRI .
+ex:RowShape a sh:NodeShape ; sh:memberShape ex:IRIShape .
+ex:S a sh:NodeShape ; sh:targetObjectsOf ex:p ; sh:memberShape ex:RowShape .
+ex:a ex:p ( ( ex:x ) ) , ( ( ex:x undef ) ) .
+''', [LIST, UNDEF], []),
+    ('list', 'undef-listLength-001', 'a slot counts in sh:minListLength and sh:maxListLength', '''
+ex:S a sh:NodeShape ; sh:targetObjectsOf ex:p ; sh:minListLength 2 ; sh:maxListLength 2 .
+ex:a ex:p ( undef ) , ( undef undef ) , ( 1 undef ) , ( 1 undef 3 ) .
+''', [LIST, UNDEF], []),
+    ('list', 'undef-uniqueMembers-001', 'in sh:uniqueMembers a slot is equal to a slot and to nothing else', '''
+ex:S a sh:NodeShape ; sh:targetObjectsOf ex:p ; sh:uniqueMembers true .
+ex:a ex:p ( 1 undef ) , ( undef ) , ( undef undef ) , ( undef 1 undef ) , ( 1 1 undef ) .
+''', [LIST, UNDEF], []),
+    # a sequence holding a slot is an ordinary value
+    ('node', 'undef-value-nodeKind-001', 'a sequence holding a slot is a value like any other sequence', '''
+ex:S a sh:NodeShape ; sh:targetNode ex:a ; sh:property ex:S-p .
+ex:S-p sh:path ex:p ; sh:nodeKind sh:IRI ; sh:minCount 2 .
+ex:a ex:p ( 1 undef ) .
+''', [UNDEF], []),
+    # a list in a shapes graph holds shapes, paths or values, so a slot in one is an ill-formed shapes graph
+    ('node', 'undef-in-001', 'a slot in sh:in is ill-formed', '''
+ex:S a sh:NodeShape ; sh:targetNode ex:a ; sh:in ( 1 undef ) .
+''', [UNDEF], []),
+    ('node', 'undef-or-001', 'a slot in sh:or is ill-formed', '''
+ex:A a sh:NodeShape .
+ex:S a sh:NodeShape ; sh:targetNode ex:a ; sh:or ( ex:A undef ) .
+''', [UNDEF], []),
+    ('path', 'undef-path-sequence-001', 'a slot in a sequence path is ill-formed', '''
+ex:S a sh:NodeShape ; sh:targetNode ex:a ; sh:property ex:S-p .
+ex:S-p sh:path ( ex:p undef ) ; sh:minCount 1 .
+''', [UNDEF], []),
+    ('path', 'undef-path-alternative-001', 'a slot in an alternative path is ill-formed', '''
+ex:S a sh:NodeShape ; sh:targetNode ex:a ; sh:property ex:S-p .
+ex:S-p sh:path [ sh:alternativePath ( ex:p undef ) ] ; sh:minCount 1 .
+''', [UNDEF], []),
+    ('node', 'undef-ignoredProperties-001', 'a slot in sh:ignoredProperties is ill-formed', '''
+ex:S a sh:NodeShape ; sh:targetNode ex:a ; sh:closed true ; sh:ignoredProperties ( undef ) .
+''', [UNDEF], []),
 ]
 
 # Where rudof-array is known to differ from the expectation; still run, and reported if it stops differing
